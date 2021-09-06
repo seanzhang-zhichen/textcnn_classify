@@ -1,5 +1,8 @@
+import os
 import torch
 from w2v import get_pretrainde_w2v
+from w2v import load_w2v
+
 
 
 class ModelConfig:
@@ -7,9 +10,9 @@ class ModelConfig:
     vocab_size = 0
     num_classes = 3
     use_pretrained_w2v = True
+    if not os.path.exists('./checkpoints/w2v_model.txt'):
+        load_w2v()
     embedding_pretrained = get_pretrainde_w2v()
-    print(embedding_pretrained)
-    print(embedding_pretrained.size())
     embedding_size = embedding_pretrained.size(1) if embedding_pretrained is not None else 300
     # embedding_size = 300
     kenel_num = 256
