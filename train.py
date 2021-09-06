@@ -85,7 +85,7 @@ def train_epoch(train_iter, config, epoch):
         optermizer.step()
     print('train epoch: {}, train_acc: {}%'.format(epoch, 100*(correct/count)))
     scheduler.step()
-    torch.save(model.state_dict(), './data/checkpoints/{}.ckpt'.format(epoch))
+    torch.save(model.state_dict(), './checkpoints/{}.ckpt'.format(epoch))
 
 
 def validation(eval_iter, config, epoch):
@@ -123,11 +123,11 @@ def train_model():
     for i in range(1, epochs+1):
         train_epoch(train_loader, config, i)
         validation(dev_loader, config, i)
-    model_path = './data/checkpoints/10.ckpt'
+    model_path = './checkpoints/10.ckpt'
     test(test_loader, model_path)
 
 def predict():
-    model_path = './data/checkpoints/10.ckpt'
+    model_path = './checkpoints/10.ckpt'
     model = TextCNN(config)
     model.to(config.device)
     model.load_state_dict(torch.load(model_path))
