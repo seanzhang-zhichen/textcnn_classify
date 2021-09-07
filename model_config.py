@@ -10,7 +10,7 @@ class ModelConfig():
     vocab_size = 0
     num_classes = 3
     max_length = 64
-    use_pretrained_w2v = True
+    use_pretrained_w2v = False
     if use_pretrained_w2v:
         if not os.path.exists('./checkpoints/w2v_model.txt'):
             load_w2v()

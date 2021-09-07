@@ -1,15 +1,11 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
 
 
 class TextCNN(nn.Module):
     def __init__(self, config):
         super(TextCNN, self).__init__()
-        # if config.embedding_pretrained is not None:
-        #     self.embedding = nn.Embedding.from_pretrained(config.embedding_pretrained, freeze=False) # freeze=False,训练时更新weight
-        # else:
         self.embedding = nn.Embedding(config.vocab_size, config.embedding_size)
         if config.use_pretrained_w2v:
             self.embedding.weight.data.copy_(config.embedding_pretrained)
