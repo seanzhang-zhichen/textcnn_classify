@@ -1,17 +1,19 @@
 # coding:utf-8
 import json
-from train import train_model
-from train import predict
-from w2v import get_pretrainde_w2v,load_w2v
+from train import TextCNNHelp
+from data_process import prepare_data
+from model_config import ModelConfig
 
 
 def train_textcnn():
-    train_model()
+    config = ModelConfig()
+    text_cnn_helper = TextCNNHelp(config)
+    X_train, y_train, X_dev, y_dev, X_test, y_test = prepare_data(config.max_length)
+    text_cnn_helper.load_data(X_train, y_train, X_dev, y_dev, X_test, y_test)
+    text_cnn_helper.train_model()
+
 
 
 train_textcnn()
-# predict()
 
-# load_w2v()
-# get_pretrainde_w2v()
 

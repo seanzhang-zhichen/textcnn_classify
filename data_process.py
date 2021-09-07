@@ -6,8 +6,6 @@ from tqdm import tqdm
 from collections import Counter
 
 
-max_length = 64
-
 def extract_three_cls_data(data_path,save_path):
     map_path = './data/three_class/map.json'
     data = pd.read_csv(data_path, sep='\t').dropna()
@@ -21,9 +19,6 @@ def extract_three_cls_data(data_path,save_path):
         with open(map_path, 'w', encoding='utf-8') as f:
             f.write(label_map_json)
     cls_data['textcnn_label'] = cls_data['label'].map(label_map)
-    # for i in range(len(cls_data['textcnn_label'])):
-    #     cls_data['textcnn_label'][i] = '__label__{}'.format(cls_data['fasttext_label'][i])
-    print(len(cls_data))
     with open('./data/stopwords.txt', 'r', encoding='utf-8') as f:
         stopwords = f.readlines()
         stopwords = [i.strip() for i in stopwords]
@@ -49,12 +44,10 @@ def build_word2id(lists):
 
 def build_data(train_data, word2id_map, max_length):
     data = train_data['text_seg']
-
     train_list = []
     label_list = train_data['textcnn_label']
     for line in data:
         train_word_list = line.split(' ')
-
         train_line_id = []
         for word in train_word_list:
             id = word2id_map[word]
@@ -107,12 +100,28 @@ def gen_word2id(train_path, dev_path, test_path):
     return word2id, id2word
 
 
-
-def process_data(data_path, word2id):
+def process_data(data_path, word2id, max_length):
     data = pd.read_csv(data_path)
     train_list, label_list = build_data(data, word2id, max_length)
     return train_list, label_list
 
+def prepare_data(max_length):
+    train_data_path = './data/train.csv'
+    train_save_path = './data/three_class/train.csv'
+    filter_stopwords(train_data_path, train_save_path)
+    dev_data_path = './data/dev.csv'
+    dev_save_path = './data/three_class/dev.csv'
+    filter_stopwords(dev_data_path, dev_save_path)
+    test_data_path = './data/test.csv'
+    test_save_path = './data/three_class/test.csv'
+    filter_stopwords(test_data_path, test_save_path)
+    word2id, id2word = gen_word2id(train_save_path, dev_save_path, test_save_path)
+    X_train, y_train = process_data(train_save_path, word2id, max_length)
+    X_dev, y_dev = process_data(dev_save_path, word2id, max_length)
+    X_test, y_test = process_data(test_save_path, word2id, max_length)
+    return X_train,y_train, X_dev, y_dev, X_test, y_test
 
 
-
+if __name__ == '__main__':
+    max_length = 64
+    prepare_data(max_length)
