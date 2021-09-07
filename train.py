@@ -119,12 +119,16 @@ def test(test_iter, model_path):
     print('test acc: {}%'.format(100*(correct/count)))
 
 def train_model():
+    print('开始训练：')
     epochs = config.epochs
     for i in range(1, epochs+1):
         train_epoch(train_loader, config, i)
         validation(dev_loader, config, i)
     model_path = './checkpoints/10.ckpt'
+    print('开始测试：')
     test(test_loader, model_path)
+    print('开始预测：')
+    predict()
 
 def predict():
     model_path = './checkpoints/10.ckpt'
