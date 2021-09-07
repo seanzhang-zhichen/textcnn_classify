@@ -20,17 +20,8 @@ def load_w2v():
     data = concat_all_data(train_save_path, dev_save_path, test_save_path)
     model_save_path = './checkpoints/w2v_model.bin'
     vec_save_path = './checkpoints/w2v_model.txt'
-
-
     if not os.path.exists(vec_save_path):
-        # sent = []
-        # for line in data['text_seg']:
-        #     sent_word_list = line.split(' ')
-        #     sent.append(sent_word_list)
-        # print(sent)
         sent = [str(row).split(' ') for row in data['text_seg']]
-        # print(sent)
-
         phrases = Phrases(sent, min_count=5, progress_per=10000)
         bigram = Phraser(phrases)
         sentence = bigram[sent]
